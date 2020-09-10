@@ -1,0 +1,18 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Коментарии для {{ post.name }}</h4>
+        </div>
+        <div class="card-body">
+            {% for comment in post.comments.toArray %}
+                <div class="p-3 mb-3 border border-secondary rounded">
+                    Статус: {% if comment.visible %}Опубликован{% else %}Скрыт{% endif %} <br>
+                    Автор: {{ comment.author.username }} <br><br>
+                    {{ comment.content }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Посты</h4>
+            <a href="{{ path('admin_post_add') }}" class="btn btn-success btn-sm shadow-sm">
+                Создать
+            </a>
+        </div>
+        <div class="card-body">
+            <table id="table" class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название</th>
+                    <th>Статус</th>
+                    <th>Автор</th>
+                    <th>Создан</th>
+                    <th>Акции</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{ post.id }}</td>
+                        <td>{{ post.name }}</td>
+                        <td>{{ post.status }}</td>
+                        <td>{{ post.author.username }}</td>
+                        <td>{{ post.created|date('m-d-Y') }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{{ path('admin_post_edit', {'post': post.id}) }}">Редатировать</a>
+                            <a class="btn btn-sm btn-danger" href="{{ path('admin_post_remove', {'post': post.id}) }}">Удалить</a>
+                            <a class="btn btn-sm btn-light" href="{{ path('admin_post_comment_list', {'post': post.id}) }}">Коментарии</a>
+                            <a class="btn btn-sm btn-success" href="#">Посмотреть</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

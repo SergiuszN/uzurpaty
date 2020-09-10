@@ -6,16 +6,17 @@ use App\Repository\PostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=PostRepository::class)
  */
 class Post
 {
-    const STATUS_NEW = 0;
-    const STATUS_AWAIT = 1;
-    const STATUS_DECLINED = 2;
-    const STATUS_POSTED = 3;
+    public const STATUS_NEW = 0;
+    public const STATUS_AWAIT = 1;
+    public const STATUS_DECLINED = 2;
+    public const STATUS_POSTED = 3;
 
     /**
      * @ORM\Id
@@ -156,6 +157,10 @@ class Post
         return $this->author;
     }
 
+    /**
+     * @param User|UserInterface|null $author
+     * @return $this
+     */
     public function setAuthor(?User $author): self
     {
         $this->author = $author;

@@ -34,6 +34,19 @@ class Comment
      */
     private $post;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default"="0"})
+     */
+    private $visible;
+
+    /**
+     * Comment constructor.
+     */
+    public function __construct()
+    {
+        $this->visible = false;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +84,18 @@ class Comment
     public function setPost(?Post $post): self
     {
         $this->post = $post;
+
+        return $this;
+    }
+
+    public function getVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): self
+    {
+        $this->visible = $visible;
 
         return $this;
     }
