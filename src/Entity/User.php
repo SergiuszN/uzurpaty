@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -39,6 +41,23 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="author", orphanRemoval=true)
+     */
+    private $posts;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $avatar;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -123,5 +142,48 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection|Post[]
+     */
+    public function getPosts(): Collection
+    {
+        return $this->posts;
+    }
+
+    public function addPost(Post $ye): self
+    {
+        if (!$this->posts->contains($ye)) {
+            $this->posts[] = $ye;
+            $ye->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePost(Post $ye): self
+    {
+        if ($this->posts->contains($ye)) {
+            $this->posts->removeElement($ye);
+            // set the owning side to null (unless already changed)
+            if ($ye->getAuthor() === $this) {
+                $ye->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): self
+    {
+        $this->avatar = $avatar;
+
+        return $this;
     }
 }
