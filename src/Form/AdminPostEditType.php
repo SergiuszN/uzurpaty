@@ -44,14 +44,14 @@ class AdminPostEditType extends AbstractType
                 'required' => true,
                 'label' => 'Статус',
                 'choices' => [
-                    Post::STATUS_NEW => 'Новый',
-                    Post::STATUS_AWAIT => 'Ожидает',
-                    Post::STATUS_DECLINED => 'Требуется исправление',
-                    Post::STATUS_POSTED => 'Опубликован',
+                    'Новый' => Post::STATUS_NEW,
+                    'Ожидает' => Post::STATUS_AWAIT,
+                    'Требуется исправление' => Post::STATUS_DECLINED,
+                    'Опубликован' => Post::STATUS_POSTED,
                 ]
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Записать',
+                'label' => 'Сохранить',
             ]);
     }
 

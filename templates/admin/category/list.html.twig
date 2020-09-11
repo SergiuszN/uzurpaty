@@ -1,0 +1,46 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Категории</h4>
+            <a href="{{ path('admin_category_add') }}" class="btn btn-success btn-sm shadow-sm">
+                Добавить категорию
+            </a>
+        </div>
+        <div class="card-body">
+            <table id="table" class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Название</th>
+                    <th>Статус</th>
+                    <th>Акции</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.id }}</td>
+                        <td>{{ category.name }}</td>
+                        {% if category.active %}
+                            <td><span class="badge badge-success">Активна</span></td>
+                        {% else %}
+                            <td><span class="badge badge-danger">Скрыта</span></td>
+                        {% endif %}
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{{ path('admin_category_edit', {'category': category.id}) }}">Редатировать</a>
+                            <a class="btn btn-sm btn-danger" href="{{ path('admin_category_remove', {'category': category.id}) }}">Удалить</a>
+                            {% if category.active %}
+                                <a class="btn btn-sm btn-light" href="{{ path('admin_category_toggle', {'category': category.id}) }}">Скрыть</a>
+                            {% else %}
+                                <a class="btn btn-sm btn-light" href="{{ path('admin_category_toggle', {'category': category.id}) }}">Активировать</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

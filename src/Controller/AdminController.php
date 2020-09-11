@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Post;
+use App\Form\AdminCategoryCreateType;
+use App\Form\AdminCategoryEditType;
 use App\Form\AdminPostCreateType;
 use App\Form\AdminPostEditType;
 use App\Repository\CategoryRepository;
@@ -148,7 +150,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($form->getData());
             $em->flush();
-            $this->addFlash('success', 'Категория успешно создана');
+            $this->addFlash('success', 'Категория успешно добавлена');
             return $this->redirectToRoute('admin_category_list');
         }
 
@@ -195,7 +197,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/category/edit/{category}", name="admin_category_toggle")
+     * @Route("/admin/category/edit/toggle/{category}", name="admin_category_toggle")
      * @IsGranted("ROLE_ADMIN_CATEGORY_TOGGLE")
      */
     public function categoryToggle(Category $category, EntityManagerInterface $em)

@@ -12,6 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Category
 {
+    public const STATUS_ACTIVE = true;
+    public const STATUS_DISABLE = false;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

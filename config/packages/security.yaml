@@ -9,6 +9,7 @@ security:
             - ROLE_AUTHOR
             - ROLE_USER
             - ROLE_ADMIN_POST_FULL
+            - ROLE_ADMIN_CATEGORY_FULL
 
         ROLE_MODER:
             - ROLE_AUTHOR
