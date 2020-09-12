@@ -1,0 +1,46 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message|trans() }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Пользователи</h4>
+{#            <a href="{{ path('admin_user_add') }}" class="btn btn-success btn-sm shadow-sm">#}
+{#                Добавить пользователя#}
+{#            </a>#}
+        </div>
+        <div class="card-body">
+            <table id="table" class="table">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Имя пользователя</th>
+                    <th>E-mail</th>
+                    <th>Роль</th>
+                    <th>Акции</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.roles[0] }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{{ path('admin_user_edit', {'user': user.id}) }}">Редатировать</a>
+                            <a class="btn btn-sm btn-danger" href="{{ path('admin_user_remove', {'user': user.id}) }}">Удалить</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

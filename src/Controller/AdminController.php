@@ -3,13 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\User;
 use App\Form\AdminCategoryCreateType;
 use App\Form\AdminCategoryEditType;
 use App\Form\AdminPostCreateType;
 use App\Form\AdminPostEditType;
+use App\Form\AdminUserEditType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -166,7 +170,7 @@ class AdminController extends AbstractController
     public function categoryRemove(Category $category, EntityManagerInterface $em)
     {
         if ($category->getPosts()->count() > 0) {
-            $this->addFlash('error', 'В этой категории есть посты. Она не может быть удалена.');
+            $this->addFlash('danger', 'В этой категории есть посты. Она не может быть удалена.');
             return $this->redirectToRoute('admin_category_list');
         }
 
@@ -205,5 +209,72 @@ class AdminController extends AbstractController
         $category->setActive(!$category->getActive());
         $em->flush();
         return $this->redirectToRoute('admin_category_list');
+    }
+
+    /**
+     * @Route("/admin/post/comment/toggle/{comment}", name="admin_post_comment_toggle")
+     * @IsGranted("ROLE_ADMIN_POST_COMMENT_TOGGLE")
+     */
+    public function postCommentToggle(Comment $comment, EntityManagerInterface $em)
+    {
+        $comment->setVisible(!$comment->getVisible());
+        $em->flush();
+        return $this->redirectToRoute('admin_post_comment_list', ['post' => $comment->getPost()->getId()]);
+    }
+
+    /**
+     * @Route("/admin/post/comment/remove/{comment}", name="admin_post_comment_remove")
+     * @IsGranted("ROLE_ADMIN_POST_COMMENT_REMOVE")
+     */
+    public function removePostComment(Comment $comment, EntityManagerInterface $em)
+    {
+        $postId = $comment->getPost()->getId();
+        $em->remove($comment);
+        $em->flush();
+        $this->addFlash('success', 'Коментарий успешно удален');
+        return $this->redirectToRoute('admin_post_comment_list', ['post' => $postId]);
+    }
+
+    /**
+     * @Route("/admin/user/list", name="admin_user_list")
+     * @IsGranted("ROLE_ADMIN_USER_LIST")
+     */
+    public function userList(UserRepository $repository)
+    {
+        return $this->render('admin/user/list.html.twig', [
+            'users' => $repository->findAll()
+        ]);
+    }
+
+    /**
+     * @Route("/admin/user/edit/{user}", name="admin_user_edit")
+     * @IsGranted("ROLE_ADMIN_USER_EDIT")
+     */
+    public function userEdit(User $user, Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(AdminUserEditType::class, $user)
+            ->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            $this->addFlash('success', 'Категория успешно измененна.');
+            return $this->redirectToRoute('admin_user_list');
+        }
+
+        return $this->render('admin/user/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/user/remove/{user}", name="admin_user_remove")
+     * @IsGranted("ROLE_ADMIN_USER_REMOVE")
+     */
+    public function userRemove(User $user, EntityManagerInterface $em)
+    {
+        $em->remove($user);
+        $em->flush();
+        $this->addFlash('success', 'Пользователь успешно удален');
+        return $this->redirectToRoute('admin_user_list');
     }
 }

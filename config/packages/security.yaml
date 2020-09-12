@@ -10,11 +10,15 @@ security:
             - ROLE_USER
             - ROLE_ADMIN_POST_FULL
             - ROLE_ADMIN_CATEGORY_FULL
+            - ROLE_ADMIN_USER_FULL
 
         ROLE_MODER:
             - ROLE_AUTHOR
             - ROLE_USER
             - ROLE_ADMIN_POST_MODERATION
+            - ROLE_ADMIN_POST_COMMENT_LIST
+            - ROLE_ADMIN_POST_COMMENT_TOGGLE
+            - ROLE_ADMIN_POST_COMMENT_REMOVE
 
         ROLE_AUTHOR:
             - ROLE_USER
@@ -28,6 +32,8 @@ security:
             - ROLE_ADMIN_POST_EDIT
             - ROLE_ADMIN_POST_MODERATION
             - ROLE_ADMIN_POST_COMMENT_LIST
+            - ROLE_ADMIN_POST_COMMENT_TOGGLE
+            - ROLE_ADMIN_POST_COMMENT_REMOVE
 
         ROLE_ADMIN_POST_MODERATION:
             - ROLE_ADMIN_POST_AWAITING_LIST
@@ -39,6 +45,13 @@ security:
             - ROLE_ADMIN_CATEGORY_REMOVE
             - ROLE_ADMIN_CATEGORY_EDIT
             - ROLE_ADMIN_CATEGORY_TOGGLE
+
+        ROLE_ADMIN_USER_FULL:
+            - ROLE_ADMIN_USER_LIST
+            - ROLE_ADMIN_USER_ADD
+            - ROLE_ADMIN_USER_REMOVE
+            - ROLE_ADMIN_USER_EDIT
+
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:

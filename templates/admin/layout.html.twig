@@ -34,6 +34,11 @@
                 <i class="fas fa-fw fa-list"></i>
                 <span>Категории</span></a>
         </li>
+        <li class="nav-item {% if app.request.get('_route') starts with 'admin_user_' %}active{% endif %}">
+            <a class="nav-link" href="{{ path('admin_user_list') }}">
+                <i class="fas fa-users"></i>
+                <span>Пользователи</span></a>
+        </li>
         <hr class="sidebar-divider">
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
