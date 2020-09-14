@@ -1,0 +1,40 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message|trans() }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h4 class="m-0 font-weight-bold text-primary">Посты</h4>
+        </div>
+        <div class="card-body">
+            <table id="table" class="table">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Автор</th>
+                    <th>Создан</th>
+                    <th>Акции</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td>{{ post.name }}</td>
+                        <td>{{ post.author.username }}</td>
+                        <td>{{ post.created|date('m-d-Y') }}</td>
+                        <td>
+                            <a class="btn btn-sm btn-info" href="{{ path('admin_post_review', {'post': post.id}) }}">Просмотреть</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

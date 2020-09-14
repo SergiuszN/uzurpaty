@@ -19,6 +19,17 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
+    public function findAllAwaiting()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Post::STATUS_AWAIT)
+            ->orderBy('p.created', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */

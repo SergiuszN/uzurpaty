@@ -10,6 +10,7 @@ use App\Form\AdminCategoryCreateType;
 use App\Form\AdminCategoryEditType;
 use App\Form\AdminPostCreateType;
 use App\Form\AdminPostEditType;
+use App\Form\AdminPostReviewType;
 use App\Form\AdminUserEditType;
 use App\Repository\CategoryRepository;
 use App\Repository\PostRepository;
@@ -101,13 +102,13 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/post/awaiting/{post}", name="admin_post_awaiting_list")
+     * @Route("/admin/post/awaiting-list", name="admin_post_awaiting_list")
      * @IsGranted("ROLE_ADMIN_POST_AWAITING_LIST")
      */
     public function postAwaitingList(PostRepository $repository)
     {
         return $this->render('admin/post/awaitingList.html.twig', [
-            'posts' => $repository->findAll()
+            'posts' => $repository->findAllAwaiting()
         ]);
     }
 
@@ -117,17 +118,30 @@ class AdminController extends AbstractController
      */
     public function postReview(Post $post, Request $request, EntityManagerInterface $em)
     {
+        if ($post->getStatus() !== Post::STATUS_AWAIT) {
+            return $this->redirectToRoute('admin_post_awaiting_list');
+        }
+
         $form = $this->createForm(AdminPostReviewType::class, $post)
             ->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->getClickedButton() && 'approve' === $form->getClickedButton()->getName()) {
+                $post->setStatus(Post::STATUS_POSTED);
+            }
+
+            if ($form->getClickedButton() && 'reject' === $form->getClickedButton()->getName()) {
+                $post->setStatus(Post::STATUS_DECLINED);
+            }
+
             $em->flush();
-            $this->addFlash('success', 'Изменения успешно записанны');
+            $this->addFlash('success', 'Изменения успешно сохраненны');
             return $this->redirectToRoute('admin_post_awaiting_list');
         }
 
         return $this->render('admin/post/review.html.twig', [
-            'form' => $form->createView(),
+            'post' => $post,
+            'form' => $this->createForm(AdminPostReviewType::class, $post)->createView(),
         ]);
     }
 

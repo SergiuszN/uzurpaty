@@ -32,22 +32,23 @@
                     <tr>
                         <td>{{ post.id }}</td>
                         <td>{{ post.name }}</td>
-                        {% if post.status == 0 %}
-                            <td><span class="badge badge-primary">Новый</span></td>
-                        {% endif %}
+                        <td>
+                            {% if post.status == constant("App\\Entity\\Post::STATUS_NEW") %}
+                                <span class="badge badge-primary">Новый</span>
+                            {% endif %}
 
-                        {% if post.status == 1 %}
-                            <td><span class="badge badge-warning">Ожидает</span></td>
-                        {% endif %}
+                            {% if post.status == constant("App\\Entity\\Post::STATUS_AWAIT") %}
+                                <span class="badge badge-warning">Ожидает</span>
+                            {% endif %}
 
-                        {% if post.status == 2 %}
-                            <td><span class="badge badge-danger">Требуется исправление</span></td>
-                        {% endif %}
+                            {% if post.status == constant("App\\Entity\\Post::STATUS_DECLINED") %}
+                                <span class="badge badge-danger">Требуется исправление</span>
+                            {% endif %}
 
-                        {% if post.status == 3 %}
-                            <td><span class="badge badge-success">Опубликован</span></td>
-                        {% endif %}
-
+                            {% if post.status == constant("App\\Entity\\Post::STATUS_POSTED") %}
+                                <span class="badge badge-success">Опубликован</span>
+                            {% endif %}
+                        </td>
                         <td>{{ post.author.username }}</td>
                         <td>{{ post.created|date('m-d-Y') }}</td>
                         <td>

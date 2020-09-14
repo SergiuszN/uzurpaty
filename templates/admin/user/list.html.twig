@@ -32,7 +32,11 @@
                         <td>{{ user.id }}</td>
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
-                        <td>{{ user.roles[0] }}</td>
+                        <td>
+                            {% for role in user.roles %}
+                                <span class="badge badge-secondary">{{ role }}</span>
+                            {% endfor %}
+                        </td>
                         <td>
                             <a class="btn btn-sm btn-info" href="{{ path('admin_user_edit', {'user': user.id}) }}">Редатировать</a>
                             <a class="btn btn-sm btn-danger" href="{{ path('admin_user_remove', {'user': user.id}) }}">Удалить</a>
