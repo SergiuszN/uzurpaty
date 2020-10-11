@@ -26,6 +26,7 @@ security:
         ROLE_USER: []
 
         ROLE_ADMIN_POST_FULL:
+            - ROLE_ADMIN_HOME
             - ROLE_ADMIN_POST_LIST
             - ROLE_ADMIN_POST_ADD
             - ROLE_ADMIN_POST_REMOVE
@@ -36,6 +37,7 @@ security:
             - ROLE_ADMIN_POST_COMMENT_REMOVE
 
         ROLE_ADMIN_POST_MODERATION:
+            - ROLE_ADMIN_HOME
             - ROLE_ADMIN_POST_AWAITING_LIST
             - ROLE_ADMIN_POST_REVIEW
 

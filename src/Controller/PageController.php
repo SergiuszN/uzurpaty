@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
@@ -11,8 +11,10 @@ class PageController extends AbstractController
     /**
      * @Route("/", name="page_home")
      */
-    public function home()
+    public function home(PostRepository $repository)
     {
-        return new Response('<html lang="ru"><head><title>Вахахах</title></head><body><h1>Привет мир</h1></body></html>');
+        return $this->render('page/home.html.twig', [
+            'posts' => $repository->findAll()
+        ]);
     }
 }

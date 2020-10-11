@@ -26,6 +26,7 @@ class AdminPostCreateType extends AbstractType
             ->add('country', CountryType::class, [
                 'required' => true,
                 'label' => 'Страна',
+                'choice_translation_locale' => 'ru',
             ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,

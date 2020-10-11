@@ -89,6 +89,12 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         return $credentials['password'];
     }
 
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
+    {
+        parent::onAuthenticationFailure($request, $exception);
+        return new RedirectResponse($this->urlGenerator->generate('page_home'));
+    }
+
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {

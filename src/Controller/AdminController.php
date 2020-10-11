@@ -24,6 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class AdminController extends AbstractController
 {
     /**
+     * @Route("/admin", name="admin_home")
+     * @IsGranted("ROLE_ADMIN_HOME")
+     */
+    public function home()
+    {
+        return $this->isGranted('ROLE_ADMIN_POST_LIST')
+            ? $this->redirectToRoute('admin_post_list')
+            : $this->redirectToRoute('admin_post_awaiting_list');
+    }
+
+    /**
      * @Route("/admin/post/list", name="admin_post_list")
      * @IsGranted("ROLE_ADMIN_POST_LIST")
      */
