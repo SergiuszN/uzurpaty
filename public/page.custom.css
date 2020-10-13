@@ -1,0 +1,4 @@
+.inner-img-fluid img {
+    max-width: 100%;
+    height: auto;
+}

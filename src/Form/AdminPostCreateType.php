@@ -4,12 +4,12 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Post;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,11 +33,11 @@ class AdminPostCreateType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Категория',
             ])
-            ->add('preview', TextareaType::class, [
+            ->add('preview', CKEditorType::class, [
                 'required' => true,
                 'label' => 'Превью',
             ])
-            ->add('content', TextareaType::class, [
+            ->add('content', CKEditorType::class, [
                 'required' => true,
                 'label' => 'Контент',
             ])

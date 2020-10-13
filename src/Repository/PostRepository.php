@@ -30,6 +30,15 @@ class PostRepository extends ServiceEntityRepository
             ;
     }
 
+    public function getPageQuery()
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', Post::STATUS_POSTED)
+            ->orderBy('p.created', 'DESC')
+            ->getQuery();
+    }
+
     // /**
     //  * @return Post[] Returns an array of Post objects
     //  */

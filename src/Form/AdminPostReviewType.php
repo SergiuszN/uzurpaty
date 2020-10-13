@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Post;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -34,12 +35,12 @@ class AdminPostReviewType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Категория',
             ])
-            ->add('preview', TextareaType::class, [
+            ->add('preview', CKEditorType::class, [
                 'disabled' => true,
                 'required' => true,
                 'label' => 'Превью',
             ])
-            ->add('content', TextareaType::class, [
+            ->add('content', CKEditorType::class, [
                 'disabled' => true,
                 'required' => true,
                 'label' => 'Контент',

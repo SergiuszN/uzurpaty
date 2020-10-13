@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Form;
-
 
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
@@ -40,5 +38,4 @@ class AdminCategoryEditType extends AbstractType
         $resolver->setDefault('data_class', Category::class);
         $resolver->setDefault('empty_data', new Category());
     }
-
 }

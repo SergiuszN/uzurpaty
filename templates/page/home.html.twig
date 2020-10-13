@@ -1,16 +1,25 @@
 {% extends 'page/layout.html.twig' %}
 
 {% block main %}
-    {% for post in posts %}
+    {% for post in pagination %}
         <div class="card mb-4">
             <div class="card-body">
                 <a class="text-dark" href="#">
                     <h2 class="mb-4">{{ post.name }}</h2>
                 </a>
-                {{ post.preview }}
+                <div class="inner-img-fluid">
+                    {{ post.preview|raw }}
+                </div>
             </div>
         </div>
     {% endfor %}
+
+    <div>
+        {{ knp_pagination_render(pagination, null, {
+            'country': null,
+            'category': null
+        }) }}
+    </div>
 {% endblock %}
 
 {% block aside %}
