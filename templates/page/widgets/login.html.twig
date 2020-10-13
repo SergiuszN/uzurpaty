@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-9">
                         <strong>{{ app.user.username }}</strong><br>
-                        <a href="{{ path('app_logout') }}" class="text-secondary">Выйти</a>
+                        <a href="{{ path('security_logout') }}" class="text-secondary">Выйти</a>
                     </div>
                 </div>
             </li>
@@ -27,7 +27,7 @@
         </ul>
     {% else %}
         <div class="card-body">
-            <form method="post" action="{{ path('app_login') }}">
+            <form method="post" action="{{ path('security_login') }}">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
                 <h5 class="mb-3 font-weight-normal text-center">Авторизация</h5>
@@ -59,9 +59,21 @@
                 </div>
                 #}
 
-                <button class="btn btn-block btn-success text-center" type="submit">
-                    Войти
-                </button>
+                <div class="form-group text-center">
+                    <a class="text-decoration-none text-muted font-italic" href="{{ path('security_forgot') }}">Забыли Пароль?</a>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-block btn-success text-center" type="submit">
+                        Войти
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <a class="btn btn-block btn-light text-center" href="{{ path('security_register') }}">
+                        Регистрация
+                    </a>
+                </div>
             </form>
 
         </div>

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -46,7 +48,7 @@ class Post
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="yes")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -93,7 +95,7 @@ class Post
     public function __construct()
     {
         $this->status = self::STATUS_NEW;
-        $this->created = new \DateTime();
+        $this->created = new DateTime();
         $this->deleted = false;
         $this->opened = 0;
         $this->comments = new ArrayCollection();
@@ -168,12 +170,12 @@ class Post
         return $this;
     }
 
-    public function getCreated(): ?\DateTimeInterface
+    public function getCreated(): ?DateTimeInterface
     {
         return $this->created;
     }
 
-    public function setCreated(\DateTimeInterface $created): self
+    public function setCreated(?DateTimeInterface $created): self
     {
         $this->created = $created;
 
