@@ -9,6 +9,7 @@
     {% block css %}
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
         <link rel="stylesheet" href="{{ asset('page.custom.css') }}?v=1">
     {% endblock %}
 </head>
@@ -22,9 +23,18 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="form-inline my-2 my-lg-0 mr-auto">
+            <form class="form-inline my-2 my-lg-0 mr-auto" action="{{ path('page_home') }}">
                 <div class="input-group mr-sm-2">
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Поиск">
+                    {% if app.request.query.get('author') %}
+                        <input type="hidden" name="author" value="{{ app.request.query.get('author') }}">
+                    {% endif %}
+                    {% if app.request.query.get('category') %}
+                        <input type="hidden" name="category" value="{{ app.request.query.get('category') }}">
+                    {% endif %}
+                    {% if app.request.query.get('country') %}
+                        <input type="hidden" name="country" value="{{ app.request.query.get('country') }}">
+                    {% endif %}
+                    <input type="text" name="search" class="form-control" id="inlineFormInputGroup" placeholder="Поиск" value="{{ app.request.query.get('search') }}">
                     <div class="input-group-append">
                         <div class="input-group-text"><i class="fas fa-search"></i></div>
                     </div>
@@ -39,8 +49,13 @@
                         Страны
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Страны 1</a>
-                        <a class="dropdown-item" href="#">Страны 2</a>
+                        {% for country in widget_search.findAllCountries %}
+                            <a class="dropdown-item {% if country.code == widget_search.country %}active{% endif %}"
+                               href="{{ widget_search.generateRoute('country', country.code) }}">
+                                <span class="flag-icon flag-icon-{{ country.code|lower }}"></span>
+                                {{country.name}}
+                            </a>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="nav-item dropdown">
@@ -48,8 +63,10 @@
                         Категории
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Категории 1</a>
-                        <a class="dropdown-item" href="#">Категории 2</a>
+                        {% for category in widget_search.findAllCategories %}
+                            <a class="dropdown-item {% if category.id == widget_search.category %}active{% endif %}"
+                               href="{{ widget_search.generateRoute('category', category.id) }}">{{ category.name }}</a>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

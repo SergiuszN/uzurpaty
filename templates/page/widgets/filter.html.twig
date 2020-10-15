@@ -1,0 +1,48 @@
+{% if pagination|length > 0 %}
+    {{ widget_search.setPost(pagination[0]) }}
+
+    {% if widget_search.isSearchPanel() %}
+        <div class="card mb-4">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <div class="d-inline-flex float-right">
+                        <a class="text-secondary" href="{{ path('page_home') }}"><i class="fas fa-trash-alt"></i></a>
+                    </div>
+
+                    Фильтры
+                </li>
+                <li class="list-group-item">
+                    {% if widget_search.search %}
+                        <div class="bg-light p-2 mb-2">
+                            <a class="text-secondary float-right" href="{{ widget_search.generateRoute('search', null) }}"><i class="fas fa-times"></i></a>
+                            Поиск: <strong class="ml-1">{{ widget_search.search }}</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if widget_search.author %}
+                        <div class="bg-light p-2 mb-2">
+                            <a class="text-secondary float-right" href="{{ widget_search.generateRoute('author', null) }}"><i class="fas fa-times"></i></a>
+                            Автор: <strong class="ml-1">{{ widget_search.authorName }}</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if widget_search.category %}
+                        <div class="bg-light p-2 mb-2">
+                            <a class="text-secondary float-right" href="{{ widget_search.generateRoute('category', null) }}"><i class="fas fa-times"></i></a>
+                            Категория: <strong class="ml-1">{{ widget_search.categoryName }}</strong>
+                        </div>
+                    {% endif %}
+
+                    {% if widget_search.country %}
+                        <div class="bg-light p-2 mb-2">
+                            <a class="text-secondary float-right" href="{{ widget_search.generateRoute('country', null) }}"><i class="fas fa-times"></i></a>
+                            Страна:
+                            <strong class="ml-1">{{ widget_search.countryName }}</strong>
+                            <span class="flag-icon flag-icon-{{ widget_search.country|lower }}"></span>
+                        </div>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+{% endif %}

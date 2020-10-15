@@ -5,3 +5,4 @@ twig:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
     globals:
         widget_login: '@App\Service\Widget\LoginWidget'
+        widget_search: '@App\Service\Widget\SearchWidget'

@@ -8,6 +8,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Countries;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -233,6 +234,11 @@ class Post
     public function getCountry(): ?string
     {
         return $this->country;
+    }
+
+    public function getCountryName($locale = 'ru'): string
+    {
+        return Countries::getName($this->country, $locale);
     }
 
     public function setCountry(string $country): self

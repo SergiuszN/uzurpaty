@@ -1,27 +1,75 @@
 {% extends 'page/layout.html.twig' %}
 
 {% block main %}
-    {% for post in pagination %}
+    {% if pagination|length == 0 %}
         <div class="card mb-4">
             <div class="card-body">
-                <a class="text-dark" href="#">
-                    <h2 class="mb-4">{{ post.name }}</h2>
+                <p class="h5 text-secondary mb-5">Упс. Кажется по вашему запросу ничего не найденно. Попробуйте вычистить все фильтры.</p>
+                <a href="{{ path('page_home') }}">Почистить</a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% for post in pagination %}
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center">
+                <div class="mr-auto d-flex align-items-center">
+                    <a href="{{ widget_search.generateRoute('author', post.author.id) }}" class="d-inline-flex">
+                        <img class="img-thumbnail rounded-circle" style="max-width: 60px; max-height: 60px;" src="{{ post.author.avatar }}" alt="{{ post.author.username }}">
+                    </a>
+
+                    <div class="d-inline-flex ml-3 flex-column">
+                        <div>
+                            <a href="{{ widget_search.generateRoute('author', post.author.id) }}" class="d-inline text-secondary text-decoration-none">{{ post.author.username }}</a>
+                        </div>
+                        <div>
+                            {{ post.created|date('H:i d/m/y') }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ml-auto d-flex align-items-center">
+                    <a class="text-secondary text-decoration-none" href="#save">
+                        <i class="fas fa-save"></i>
+                    </a>
+
+                    <span class="text-secondary text-decoration-none ml-4">
+                        <i class="fas fa-eye mr-1"></i>
+                        {{ post.opened }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <a class="text-secondary text-decoration-none" href="#">
+                    <h2 class="mb-4 h5">{{ post.name }}</h2>
                 </a>
                 <div class="inner-img-fluid">
                     {{ post.preview|raw }}
                 </div>
+
+                <hr>
+
+                <div class="d-flex">
+                    <a class="text-decoration-none text-secondary float-right bg-light p-2 mr-2" href="{{ widget_search.generateRoute('country', post.country) }}">
+                        <span class="flag-icon flag-icon-{{ post.country|lower }}"></span>
+                        {{ post.countryName }}
+                    </a>
+
+                    <a class="text-decoration-none text-secondary bg-light p-2" href="{{ widget_search.generateRoute('category', post.category.id) }}">{{ post.category.name }}</a>
+                </div>
             </div>
+
         </div>
     {% endfor %}
 
     <div>
-        {{ knp_pagination_render(pagination, null, {
-            'country': null,
-            'category': null
-        }) }}
+        {{ knp_pagination_render(pagination) }}
     </div>
 {% endblock %}
 
 {% block aside %}
+    {% include 'page/widgets/filter.html.twig' %}
+
     {% include 'page/widgets/login.html.twig' %}
 {% endblock %}
