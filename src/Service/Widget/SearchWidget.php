@@ -56,7 +56,7 @@ class SearchWidget
 
     public function isSearchPanel()
     {
-        return $this->post && ($this->filters->author || $this->filters->category || $this->filters->country);
+        return $this->post && ($this->filters->author || $this->filters->category || $this->filters->country || $this->filters->search);
     }
 
     public function getAuthor()
