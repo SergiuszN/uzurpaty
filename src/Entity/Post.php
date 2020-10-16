@@ -219,6 +219,11 @@ class Post
         return $this;
     }
 
+    public function increaseOpened()
+    {
+        $this->opened++;
+    }
+
     public function getCategory(): ?Category
     {
         return $this->category;
