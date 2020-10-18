@@ -55,7 +55,7 @@
                             <a class="btn btn-sm btn-info" href="{{ path('admin_post_edit', {'post': post.id}) }}">Редатировать</a>
                             <a class="btn btn-sm btn-danger" href="{{ path('admin_post_remove', {'post': post.id}) }}">Удалить</a>
                             <a class="btn btn-sm btn-light" href="{{ path('admin_post_comment_list', {'post': post.id}) }}">Коментарии</a>
-                            <a class="btn btn-sm btn-success" href="#">Посмотреть</a>
+                            <a class="btn btn-sm btn-success" href="{{ path('page_post', {'post': post.id}) }}">Посмотреть</a>
                         </td>
                     </tr>
                 {% endfor %}

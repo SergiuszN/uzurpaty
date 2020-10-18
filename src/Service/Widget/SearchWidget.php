@@ -98,10 +98,21 @@ class SearchWidget
         return $this->filters->search;
     }
 
+    public function getSearchRoute()
+    {
+        switch ($this->route) {
+            case 'page_saved':
+                return 'page_saved';
+            case 'page_subscribed':
+                return 'page_subscribed';
+            default: return 'page_home';
+        }
+    }
+
     public function generateRoute($type, $value)
     {
         $params = (array)$this->filters;
         $params[$type] = $value;
-        return $this->router->generate($this->route, $params);
+        return $this->router->generate($this->getSearchRoute(), $params);
     }
 }

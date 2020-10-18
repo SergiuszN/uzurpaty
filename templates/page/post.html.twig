@@ -13,7 +13,7 @@
                         <a href="{{ widget_search.generateRoute('author', post.author.id) }}" class="d-inline text-secondary text-decoration-none">{{ post.author.username }}</a>
 
                         {% if app.user %}
-                            <a class="{% if app.user.isSubscribedAuthor(post.author) %}text-danger{% else %}text-secondary{% endif%} text-decoration-none" href="{{ path('page_subscribe_author', {author: post.author} )}}">
+                            <a class="{% if app.user.isSubscribedAuthor(post.author) %}text-danger{% else %}text-secondary{% endif%} text-decoration-none" href="{{ path('page_subscribe_author', {author: post.author.id} )}}">
                                 <a href=""><i class="fas fa-check-circle"></i></a>
                             </a>
                         {% endif %}
