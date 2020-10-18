@@ -261,6 +261,16 @@ class Post
         return $this->comments;
     }
 
+    /**
+     * @return Comment[]
+     */
+    public function getVisibleComments()
+    {
+        return array_values(array_filter($this->comments->getValues(), function (Comment $comment) {
+            return $comment->getVisible();
+        }));
+    }
+
     public function addComment(Comment $comment): self
     {
         if (!$this->comments->contains($comment)) {

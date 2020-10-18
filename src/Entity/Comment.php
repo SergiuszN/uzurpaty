@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\CommentRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -40,6 +42,11 @@ class Comment
     private $visible;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created;
+
+    /**
      * Comment constructor.
      */
     public function __construct()
@@ -64,12 +71,19 @@ class Comment
         return $this;
     }
 
-    public function getAuthor(): ?User
+    /**
+     * @return UserInterface|User|null
+     */
+    public function getAuthor(): ?UserInterface
     {
         return $this->author;
     }
 
-    public function setAuthor(?User $author): self
+    /**
+     * @param UserInterface|User|null $author
+     * @return $this
+     */
+    public function setAuthor(?UserInterface $author): self
     {
         $this->author = $author;
 
@@ -96,6 +110,18 @@ class Comment
     public function setVisible(bool $visible): self
     {
         $this->visible = $visible;
+
+        return $this;
+    }
+
+    public function getCreated(): ?DateTimeInterface
+    {
+        return $this->created;
+    }
+
+    public function setCreated(DateTimeInterface $created): self
+    {
+        $this->created = $created;
 
         return $this;
     }

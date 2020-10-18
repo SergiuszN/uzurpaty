@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Form\AddCommentType;
 use App\Form\EditProfileType;
 use App\Repository\PostRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -64,13 +67,30 @@ class PageController extends AbstractController
      * @Route("/post/{post}", name="page_post")
      * @IsGranted("SHOW", subject="post")
      */
-    public function post(Post $post, EntityManagerInterface $em)
+    public function post(Post $post, EntityManagerInterface $em, Request $request)
     {
         $post->increaseOpened();
         $em->flush();
 
+        $formAddComment = $this->createForm(AddCommentType::class)
+            ->handleRequest($request);
+
+        if ($formAddComment->isSubmitted() && $formAddComment->isValid()) {
+            /** @var Comment $comment */
+            $comment = $formAddComment->getData();
+            $comment->setAuthor($this->getUser());
+            $comment->setPost($post);
+            $comment->setVisible(true);
+            $comment->setCreated(new DateTime());
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('page_post', ['post' => $post->getId()]);
+        }
+
         return $this->render('page/post.html.twig', [
-            'post' => $post
+            'form_add_comment' => $formAddComment->createView(),
+            'post' => $post,
         ]);
     }
 

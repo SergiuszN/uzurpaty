@@ -1,7 +1,7 @@
 {% extends 'page/layout.html.twig' %}
 
 {% block main %}
-    <div class="card mb-4">
+    <div class="card mb-5">
         <div class="card-header d-flex align-items-center">
             <div class="mr-auto d-flex align-items-center">
                 <a href="{{ widget_search.generateRoute('author', post.author.id) }}" class="d-inline-flex">
@@ -61,6 +61,32 @@
             </div>
 
             <a href="{{ app.request.headers.get('referer') }}" class="btn btn-success">Назад</a>
+        </div>
+    </div>
+
+    <div class="card mb-5">
+        <div class="card-header">
+            Комментарии
+        </div>
+        <div class="card-body">
+            {% for comment in post.getVisibleComments() %}
+                <div class="media">
+                    <img src="{% if comment.author.avatar %}{{ asset(comment.author.avatar) }}{% else %}{{ asset('img/avatar.png') }}{% endif %}" class="img-thumbnail rounded-circle mr-3" style="max-width: 60px; max-height: 60px;" alt="{{ comment.author.username }}">
+                    <div class="media-body">
+                        <span class="text-secondary float-right">{{ comment.created|date('H:i d/m/y') }}</span>
+
+                        <h5 class="mt-0">{{ comment.author.username }}</h5>
+                        {{ comment.content }}
+                    </div>
+                </div>
+                <hr>
+            {% endfor %}
+
+            {% if app.user %}
+                {{ form(form_add_comment) }}
+            {% else %}
+                <p>Залогиньтесь или <a href="{{ path('security_register') }}">зарегистрируйтесь</a> чтобы оставлять комментарии</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
