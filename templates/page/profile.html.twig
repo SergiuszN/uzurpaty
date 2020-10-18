@@ -1,0 +1,16 @@
+{% extends 'page/layout.html.twig' %}
+
+{% block main %}
+    <div class="card">
+        <div class="card-body">
+            <h1 class="h3 text-secondary">{{ app.user.username }}</h1>
+
+            {{ form(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block aside %}
+    {% include 'page/widgets/login.html.twig' %}
+{% endblock %}
+

@@ -5,12 +5,18 @@
         <div class="card-header d-flex align-items-center">
             <div class="mr-auto d-flex align-items-center">
                 <a href="{{ widget_search.generateRoute('author', post.author.id) }}" class="d-inline-flex">
-                    <img class="img-thumbnail rounded-circle" style="max-width: 60px; max-height: 60px;" src="{{ post.author.avatar }}" alt="{{ post.author.username }}">
+                    <img class="img-thumbnail rounded-circle" style="max-width: 60px; max-height: 60px;" src="{% if post.author.avatar %}{{ asset(post.author.avatar) }}{% else %}{{ asset('img/avatar.png') }}{% endif %}" alt="{{ post.author.username }}">
                 </a>
 
                 <div class="d-inline-flex ml-3 flex-column">
                     <div>
                         <a href="{{ widget_search.generateRoute('author', post.author.id) }}" class="d-inline text-secondary text-decoration-none">{{ post.author.username }}</a>
+
+                        {% if app.user %}
+                            <a class="{% if app.user.isSubscribedAuthor(post.author) %}text-danger{% else %}text-secondary{% endif%} text-decoration-none" href="{{ path('page_subscribe_author', {author: post.author} )}}">
+                                <a href=""><i class="fas fa-check-circle"></i></a>
+                            </a>
+                        {% endif %}
                     </div>
                     <div>
                         {{ post.created|date('H:i d/m/y') }}
@@ -19,9 +25,11 @@
             </div>
 
             <div class="ml-auto d-flex align-items-center">
-                <a class="text-secondary text-decoration-none" href="#save">
-                    <i class="fas fa-save"></i>
-                </a>
+                {% if app.user %}
+                    <a class="{% if app.user.isSavedPost(post) %}text-danger{% else %}text-secondary{% endif%} text-decoration-none" href="{{ path('page_save_post', {post: post.id} )}}">
+                        <i class="fas fa-save"></i>
+                    </a>
+                {% endif %}
 
                 <span class="text-secondary text-decoration-none ml-4">
                         <i class="fas fa-eye mr-1"></i>

@@ -23,7 +23,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="form-inline my-2 my-lg-0 mr-auto" action="{{ path('page_home') }}">
+            <form class="form-inline my-2 my-lg-0 mr-auto" action="{{ path(app.request.get('_route')) }}">
                 <div class="input-group mr-sm-2">
                     {% if app.request.query.get('author') %}
                         <input type="hidden" name="author" value="{{ app.request.query.get('author') }}">

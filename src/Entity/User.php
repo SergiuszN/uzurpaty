@@ -3,16 +3,19 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Util\ImageMagician;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Serializable;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User implements UserInterface
+class User implements UserInterface, Serializable
 {
     public const ROLE_ADMIN = 'ROLE_ADMIN';
     public const ROLE_MODER = 'ROLE_MODER';
@@ -76,6 +79,11 @@ class User implements UserInterface
     private $avatar;
 
     /**
+     * @var UploadedFile
+     */
+    private $avatarFile;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -90,11 +98,31 @@ class User implements UserInterface
     private $tokenLifetime;
 
     /**
+     * @ORM\ManyToMany(targetEntity=Post::class)
+     * @ORM\JoinTable(name="user_saved_posts",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")}
+     *      )
+     */
+    private $savedPosts;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class)
+     * @ORM\JoinTable(name="user_subscribed_authors",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="author_id", referencedColumnName="id")}
+     *      )
+     */
+    private $subscribedAuthors;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->posts = new ArrayCollection();
+        $this->savedPosts = new ArrayCollection();
+        $this->subscribedAuthors = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -263,5 +291,125 @@ class User implements UserInterface
         $this->tokenLifetime = $tokenLifetime;
 
         return $this;
+    }
+
+    /**
+     * @return UploadedFile|null
+     */
+    public function getAvatarFile(): ?UploadedFile
+    {
+        return $this->avatarFile;
+    }
+
+    /**
+     * @param UploadedFile|null $avatarFile
+     */
+    public function setAvatarFile(?UploadedFile $avatarFile): void
+    {
+        $this->avatarFile = $avatarFile;
+    }
+
+    public function saveAvatar()
+    {
+        $newFilename = $this->id . '_' . md5($this->username) . ".jpeg";
+        $this->avatarFile->move(__DIR__ . '/../../public/avatars', $newFilename);
+        $this->avatar = 'avatars/' . $newFilename;
+
+        $fullPath = __DIR__ . '/../../public/avatars/' . $newFilename;
+        $avatar = new ImageMagician($fullPath);
+        $avatar->resizeImage(150, 150, 'crop');
+        $avatar->saveImage($fullPath, 80);
+    }
+
+    /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->roles,
+            $this->password,
+            $this->avatar,
+            $this->token,
+            $this->tokenLifetime,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->email,
+            $this->roles,
+            $this->password,
+            $this->avatar,
+            $this->token,
+            $this->tokenLifetime,
+            ) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|Post[]
+     */
+    public function getSavedPosts(): Collection
+    {
+        return $this->savedPosts;
+    }
+
+    public function addSavedPost(Post $savedPost): self
+    {
+        if (!$this->savedPosts->contains($savedPost)) {
+            $this->savedPosts[] = $savedPost;
+        }
+
+        return $this;
+    }
+
+    public function removeSavedPost(Post $savedPost): self
+    {
+        if ($this->savedPosts->contains($savedPost)) {
+            $this->savedPosts->removeElement($savedPost);
+        }
+
+        return $this;
+    }
+
+    public function isSavedPost(Post $savedPost): bool
+    {
+        return $this->savedPosts->contains($savedPost);
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getSubscribedAuthors(): Collection
+    {
+        return $this->subscribedAuthors;
+    }
+
+    public function addSubscribedAuthors(User $subscribedAuthor): self
+    {
+        if (!$this->subscribedAuthors->contains($subscribedAuthor)) {
+            $this->subscribedAuthors[] = $subscribedAuthor;
+        }
+
+        return $this;
+    }
+
+    public function removeSubscribedAuthor(User $subscribedAuthor): self
+    {
+        if ($this->subscribedAuthors->contains($subscribedAuthor)) {
+            $this->subscribedAuthors->removeElement($subscribedAuthor);
+        }
+
+        return $this;
+    }
+
+    public function isSubscribedAuthor(User $subscribedAuthor): bool
+    {
+        return $this->subscribedAuthors->contains($subscribedAuthor);
     }
 }

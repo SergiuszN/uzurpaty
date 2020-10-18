@@ -22,6 +22,9 @@ class SearchWidget
     /** @var EntityManagerInterface */
     private $em;
 
+    /** @var string */
+    private $route;
+
     public function __construct(RequestStack $requestStack, RouterInterface $router, EntityManagerInterface $em)
     {
         $this->router = $router;
@@ -36,6 +39,7 @@ class SearchWidget
             'search' => $request ? $request->query->get('search', null) : null,
         ];
 
+        $this->route = $request->get('_route');
         $this->post = null;
     }
 
@@ -98,6 +102,6 @@ class SearchWidget
     {
         $params = (array)$this->filters;
         $params[$type] = $value;
-        return $this->router->generate('page_home', $params);
+        return $this->router->generate($this->route, $params);
     }
 }

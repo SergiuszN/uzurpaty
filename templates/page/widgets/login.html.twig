@@ -5,10 +5,13 @@
                 <div class="row">
                     <div class="col-3">
                         <img class="img-fluid img-thumbnail rounded-circle"
-                             src="{% if app.user.avatar %}{{ app.user.avatar }}{% else %}{{ asset('img/avatar.png') }}{% endif %}"
+                             src="{% if app.user.avatar %}{{ asset(app.user.avatar) }}{% else %}{{ asset('img/avatar.png') }}{% endif %}"
                              alt="{{ app.user.username }}">
                     </div>
                     <div class="col-9">
+                        <a class="float-right text-secondary p-1" href="{{ path('page_profile') }}">
+                            <i class="fas fa-user-cog"></i>
+                        </a>
                         <strong>{{ app.user.username }}</strong><br>
                         <a href="{{ path('security_logout') }}" class="text-secondary">Выйти</a>
                     </div>
@@ -19,9 +22,16 @@
                     {% if is_granted('ROLE_MODER') %}
                         <a href="{{ path('admin_home') }}" class="list-group-item list-group-item-action border-0">Админка</a>
                     {% endif %}
-                    <a href="#" class="list-group-item list-group-item-action border-0">Коментарии</a>
-                    <a href="#" class="list-group-item list-group-item-action border-0">Сохраненное</a>
-                    <a href="#" class="list-group-item list-group-item-action border-0">Подписки</a>
+                    <a href="{{ path('page_home') }}"
+                       class="list-group-item list-group-item-action border-0 {% if app.request.get('_route') == 'page_home' %}active{% endif %}">
+                        Лента
+                    </a>
+                    <a href="{{ path('page_saved') }}" class="list-group-item list-group-item-action border-0 {% if app.request.get('_route') == 'page_saved' %}active{% endif %}">
+                        Сохраненное
+                    </a>
+                    <a href="{{ path('page_subscribed') }}" class="list-group-item list-group-item-action border-0 {% if app.request.get('_route') == 'page_subscribed' %}active{% endif %}">
+                        Подписки
+                    </a>
                 </div>
             </li>
         </ul>

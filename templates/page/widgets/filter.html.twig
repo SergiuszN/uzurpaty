@@ -6,7 +6,7 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     <div class="d-inline-flex float-right">
-                        <a class="text-secondary" href="{{ path('page_home') }}"><i class="fas fa-trash-alt"></i></a>
+                        <a class="text-secondary" href="{{ path(app.request.get('_route')) }}"><i class="fas fa-trash-alt"></i></a>
                     </div>
 
                     Фильтры

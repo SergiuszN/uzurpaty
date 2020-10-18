@@ -6,6 +6,7 @@ use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -31,7 +32,7 @@ class PostRepository extends ServiceEntityRepository
             ;
     }
 
-    public function getPageQuery(Request $request)
+    public function getPageBuilder(Request $request)
     {
         $query = $this->createQueryBuilder('p')
             ->andWhere('p.status = :status')
@@ -63,6 +64,39 @@ class PostRepository extends ServiceEntityRepository
                 ->andWhere('p.country = :country')
                 ->setParameter('country', $request->query->get('country', null));
         }
+
+        return $query;
+    }
+
+    public function getPageQuery(Request $request)
+    {
+        return $this->getPageBuilder($request)->getQuery();
+    }
+
+    public function getSavedPageQuery(UserInterface $user, Request $request)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $savedPostsQuery = $connection->prepare("SELECT post_id FROM user_saved_posts WHERE user_id=:userId");
+        $savedPostsQuery->execute(['userId' => $user->getId()]);
+
+        $query = $this->getPageBuilder($request);
+        $query
+            ->andWhere('p.id IN (:savedPosts)')
+            ->setParameter('savedPosts', $savedPostsQuery->fetchAll());
+
+        return $query->getQuery();
+    }
+
+    public function getSubscribedAuthorsPageQuery(UserInterface $user, Request $request)
+    {
+        $connection = $this->getEntityManager()->getConnection();
+        $subscribedAuthorsQuery = $connection->prepare("SELECT author_id FROM user_subscribed_authors WHERE user_id=:userId");
+        $subscribedAuthorsQuery->execute(['userId' => $user->getId()]);
+
+        $query = $this->getPageBuilder($request);
+        $query
+            ->andWhere('p.author IN (:subscribedAuthors)')
+            ->setParameter('subscribedAuthors', $subscribedAuthorsQuery->fetchAll());
 
         return $query->getQuery();
     }
